@@ -3,6 +3,9 @@ fenceFront images/FenceFront.bmp
 fenceTopRight images/FenceTopRight.bmp
 fenceRight images/FenceRight.bmp
 fenceBottomRight images/FenceBottomRight.bmp
+fenceTopLeft images/FenceTopLeft.bmp
+fenceBottomLeft images/FenceBottomLeft.bmp
+dirt images/Dirt.bmp
 octo images/s1.bmp 255 255 255 0
 octo images/s2.bmp 255 255 255 0
 octo images/s3.bmp 255 255 255 0

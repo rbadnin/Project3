@@ -23,8 +23,9 @@ final class WorldModel
    // constructor
    public WorldModel(int numRows, int numCols, Background defaultBackground)
    {
-      this.numRows = numRows;
-      this.numCols = numCols;
+      System.out.println(numRows + " " + numCols);
+      this.numRows = numRows - 30;
+      this.numCols = numCols-40;
       this.background = new Background[numRows][numCols];
       this.occupancy = new Entity[numRows][numCols];
       this.entities = new HashSet<>();
