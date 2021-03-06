@@ -34,8 +34,7 @@ final class EventScheduler
       }
    }
 
-   public void updateOnTime(long time)
-   {
+   public void updateOnTime(long time) throws InterruptedException {
       while (!eventQueue.isEmpty() &&
               eventQueue.peek().getTime() < time)
       {

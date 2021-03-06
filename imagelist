@@ -15,7 +15,7 @@ number6 images/Number6.bmp
 number7 images/Number7.bmp
 number8 images/Number8.bmp
 flag images/Flag.bmp
-character images/MainCharacter.bmp
+walkRight images/WalkingRight.bmp
 octo images/s1.bmp 255 255 255 0
 octo images/s2.bmp 255 255 255 0
 octo images/s3.bmp 255 255 255 0

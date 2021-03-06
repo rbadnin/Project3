@@ -8,7 +8,7 @@ import java.awt.font.ImageGraphicAttribute;
 public class FieldManager {
     public static final int XOFFSET = 5; //Distance field starts from game border (X axis)
     public static final int YOFFSET = 5; //Distance field starts from game border (Y axis)
-    private String[][] mineField;
+    public String[][] mineField;
     private int flagCount;
 
     private int placedFlagCount = 0;
@@ -29,7 +29,7 @@ public class FieldManager {
     }
 
 
-    private String[][] caluclateNeighborValues() {
+    public String[][] caluclateNeighborValues() {
         String[][] field = mineField;
         int count;
         for (int i = 0; i < mineField.length; i++) {
@@ -37,7 +37,7 @@ public class FieldManager {
                 count = calculateSingleNeighbor(i, k);
                 if((k - FieldManager.XOFFSET + 1 > 0 && k - FieldManager.XOFFSET < 20) &&
                         ((i - FieldManager.YOFFSET + 1 > 0 && i - FieldManager.YOFFSET < 30))) {
-                    if (mineField[i][k] == null)
+                    if (mineField[i][k] == null || !mineField[i][k].equals("Mine"))
                         mineField[i][k] = "" + count;
                 }
             }
@@ -81,7 +81,8 @@ public class FieldManager {
 
                 for (int curRow = rowStart; curRow <= rowFinish; curRow += 1) {
                     for (int curCol = colStart; curCol <= colFinish; curCol += 1) {
-                        if (mineField[curRow][curCol] != null && !mineField[curRow][curCol].equals("searched") && !mineField[curRow][curCol].equals("Mine")) {
+                        if (mineField[curRow][curCol] != null && !mineField[curRow][curCol].equals("searched") && !mineField[curRow][curCol].equals("Mine")
+                                && !mineField[curRow][curCol].equals("flag")) {
                             int tileValue = Integer.parseInt(mineField[curRow][curCol]);
                             if (tileValue == 0)
                                 reveal(curRow, curCol, imageStore, world, true);

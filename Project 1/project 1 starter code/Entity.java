@@ -22,6 +22,8 @@ public abstract class Entity
     }
 
 
+
+
     // accessor methods
     protected int getActionPeriod(){
         return actionPeriod;

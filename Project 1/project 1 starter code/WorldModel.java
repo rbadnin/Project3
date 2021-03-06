@@ -1,4 +1,6 @@
 import processing.core.PImage;
+import java.util.concurrent.TimeUnit;
+
 
 import java.util.*;
 
@@ -18,6 +20,8 @@ final class WorldModel
    private final Entity[][] occupancy;
    private final Set<Entity> entities;
    public FieldManager manager;
+   public long gameTime;
+
 
    private static final int PROPERTY_KEY = 0;
 
@@ -25,7 +29,7 @@ final class WorldModel
    // constructor
    public WorldModel(int numRows, int numCols, Background defaultBackground)
    {
-      System.out.println(numRows + " " + numCols);
+      this.gameTime = System.currentTimeMillis();
       this.numRows = numRows - 30;
       this.numCols = numCols-40;
       this.background = new Background[numRows][numCols];
@@ -148,30 +152,36 @@ final class WorldModel
 
 
    // private methods
-   private Optional<ActionEntity> nearestEntity(List<ActionEntity> entities, Point pos)
+   public Point findNextDirt(Point start, ImageStore imageStore)
    {
-      if (entities.isEmpty())
-      {
-         return Optional.empty();
-      }
-      else
-      {
-         ActionEntity nearest = entities.get(0);
-         int nearestDistance = nearest.getPosition().distanceSquared(pos);
+      Point nearest= new Point(0, 0);
+      Point nextGrass = new Point(0,0);
 
-         for (ActionEntity other : entities)
-         {
-            int otherDistance = other.getPosition().distanceSquared(pos);
+      int rowStart  = Math.max( start.getX() - 1, 0 + FieldManager.YOFFSET);
+      int rowFinish = Math.min( start.getX() + 1, background.length - 1 );
+      int colStart  = Math.max( start.getY() - 1, 0 + FieldManager.XOFFSET);
+      int colFinish = Math.min( start.getY() + 1, background[0].length - 1 );
 
-            if (otherDistance < nearestDistance)
+
+      boolean foundDirt = false;
+      for ( int curRow = rowStart; curRow <= rowFinish; curRow++ ) {
+         for ( int curCol = colStart; curCol <= colFinish; curCol++ ) {
+            if (Optional.of(this.background[start.getY()][start.getX()].getCurrentImage())
+                    .equals(Optional.of(imageStore.getImageList("grass").get(0))) )
+                  nextGrass = nearest = new Point(curRow, curCol);
+            else if ((curRow != start.getX() && curCol != start.getY()) &&
+                    !Optional.of(this.background[start.getY()][start.getX()].getCurrentImage())
+                            .equals(Optional.of(imageStore.getImageList("flag").get(0))))
             {
-               nearest = other;
-               nearestDistance = otherDistance;
+                  foundDirt = true;
+                  nearest = new Point(curRow, curCol);
             }
          }
-
-         return Optional.of(nearest);
       }
+      if (foundDirt)
+         return nearest;
+      else
+         return nextGrass;
    }
 
    private boolean withinBounds(Point pos)
@@ -235,6 +245,7 @@ final class WorldModel
       addEntity(character);
    }
 
+
    private boolean processLine(String line, ImageStore imageStore)
    {
       String[] properties = line.split("\\s");
@@ -260,23 +271,22 @@ final class WorldModel
          setBackground(pt,
                  new Background(id, imageStore.getImageList(id)));
       }
-
       return properties.length == Background.BGND_NUM_PROPERTIES;
    }
 
-   public boolean parseMainChactacter(String [] properties, ImageStore imageStore)
-   {
-      if (properties.length == Octo.OCTO_NUM_PROPERTIES)
-      {
-         Point pt = new Point(Integer.parseInt(properties[Octo.OCTO_COL]),
-                 Integer.parseInt(properties[Octo.OCTO_ROW]));
-         Entity character = Creator.createMainCharacter(properties[Octo.OCTO_ID],
-                 pt, imageStore.getImageList(Octo.OCTO_KEY));
-         tryAddEntity(character);
-      }
-
-      return properties.length == Octo.OCTO_NUM_PROPERTIES;
-   }
+//   public boolean parseMainChactacter(String [] properties, ImageStore imageStore)
+//   {
+//      if (properties.length == Octo.OCTO_NUM_PROPERTIES)
+//      {
+//         Point pt = new Point(Integer.parseInt(properties[Octo.OCTO_COL]),
+//                 Integer.parseInt(properties[Octo.OCTO_ROW]));
+//         Entity character = Creator.createMainCharacter(properties[Octo.OCTO_ID],
+//                 pt, imageStore.getImageList(Octo.OCTO_KEY));
+//         tryAddEntity(character);
+//      }
+//
+//      return properties.length == Octo.OCTO_NUM_PROPERTIES;
+//   }
 
 
 

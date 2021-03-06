@@ -20,6 +20,11 @@ public class Creator {
         return new MainCharacter(id, position, images);
     }
 
+    public static DirtFiller createDirtFiller(String id, Point position, List<PImage> images)
+    {
+        return new DirtFiller(id, position, images);
+    }
+
 
 
 

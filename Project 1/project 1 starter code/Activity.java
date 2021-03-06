@@ -16,8 +16,7 @@ public class Activity implements Action{
 
 
         // methods from Action
-        public void executeAction(EventScheduler scheduler)
-        {
+        public void executeAction(EventScheduler scheduler) throws InterruptedException {
             entity.executeActivity(world, imageStore, scheduler);
         }
 
