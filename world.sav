@@ -1,13 +1,3 @@
-octo octo_6_25 6 25 2 930 100
-octo octo_17_22 17 22 2 982 100
-octo octo_7_13 7 13 2 913 100
-octo octo_23_6 23 6 2 777 100
-octo octo_37_6 37 6 2 991 100
-octo octo_37_10 37 10 2 600 100
-octo octo_37_18 37 18 2 888 100
-octo octo_31_15 31 15 2 933 100
-octo octo_31_26 31 26 2 734 100
-octo octo_24_26 24 26 2 851 100
 background grass 0 0
 background grass 1 0
 background grass 2 0
@@ -1208,7 +1198,8 @@ background grass 36 29
 background grass 37 29
 background grass 38 29
 background grass 39 29
-background fenceTopLeft 5 4
+background fenceTopLeft 4 4
+background fenceFront 5 4
 background fenceFront 6 4
 background fenceFront 7 4
 background fenceFront 8 4
@@ -1239,7 +1230,8 @@ background fenceFront 32 4
 background fenceFront 33 4
 background fenceFront 34 4
 background fenceTopRight 35 4
-background fenceBottomLeft 5 25
+background fenceBottomLeft 4 25
+background fenceFront 5 25
 background fenceFront 6 25
 background fenceFront 7 25
 background fenceFront 8 25
@@ -1290,23 +1282,23 @@ background fenceRight 35 8
 background fenceRight 35 7
 background fenceRight 35 6
 background fenceRight 35 5
-background fenceRight 5 24
-background fenceRight 5 23
-background fenceRight 5 22
-background fenceRight 5 21
-background fenceRight 5 20
-background fenceRight 5 19
-background fenceRight 5 18
-background fenceRight 5 17
-background fenceRight 5 16
-background fenceRight 5 15
-background fenceRight 5 14
-background fenceRight 5 13
-background fenceRight 5 12
-background fenceRight 5 11
-background fenceRight 5 10
-background fenceRight 5 9
-background fenceRight 5 8
-background fenceRight 5 7
-background fenceRight 5 6
-background fenceRight 5 5
+background fenceRight 4 24
+background fenceRight 4 23
+background fenceRight 4 22
+background fenceRight 4 21
+background fenceRight 4 20
+background fenceRight 4 19
+background fenceRight 4 18
+background fenceRight 4 17
+background fenceRight 4 16
+background fenceRight 4 15
+background fenceRight 4 14
+background fenceRight 4 13
+background fenceRight 4 12
+background fenceRight 4 11
+background fenceRight 4 10
+background fenceRight 4 9
+background fenceRight 4 8
+background fenceRight 4 7
+background fenceRight 4 6
+background fenceRight 4 5

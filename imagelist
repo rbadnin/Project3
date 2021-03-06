@@ -6,6 +6,16 @@ fenceBottomRight images/FenceBottomRight.bmp
 fenceTopLeft images/FenceTopLeft.bmp
 fenceBottomLeft images/FenceBottomLeft.bmp
 dirt images/Dirt.bmp
+number1 images/Number1.bmp
+number2 images/Number2.bmp
+number3 images/Number3.bmp
+number4 images/Number4.bmp
+number5 images/Number5.bmp
+number6 images/Number6.bmp
+number7 images/Number7.bmp
+number8 images/Number8.bmp
+flag images/Flag.bmp
+character images/MainCharacter.bmp
 octo images/s1.bmp 255 255 255 0
 octo images/s2.bmp 255 255 255 0
 octo images/s3.bmp 255 255 255 0

@@ -13,9 +13,11 @@ final class WorldModel
    // variables
    private final int numRows;
    private final int numCols;
-   private final Background[][] background;
+   public final Background[][] background;
+   public final String[][] backgroundType;
    private final Entity[][] occupancy;
    private final Set<Entity> entities;
+   public FieldManager manager;
 
    private static final int PROPERTY_KEY = 0;
 
@@ -27,6 +29,7 @@ final class WorldModel
       this.numRows = numRows - 30;
       this.numCols = numCols-40;
       this.background = new Background[numRows][numCols];
+//      this.backgroundType = new String[0][0];
       this.occupancy = new Entity[numRows][numCols];
       this.entities = new HashSet<>();
 
@@ -34,6 +37,10 @@ final class WorldModel
       {
          Arrays.fill(this.background[row], defaultBackground);
       }
+
+      manager = new FieldManager(this.background, 100);
+      this.backgroundType = manager.CreateField();
+
    }
 
 
@@ -50,20 +57,10 @@ final class WorldModel
       return entities;
    }
 
-
-   // public methods
-   public Optional<ActionEntity> findNearest(Point pos, String name)
+   public boolean canMove(Point point)
    {
-      List<ActionEntity> ofType = new LinkedList<>();
-      for (Entity entity : entities)
-      {
-         if (entity.getClass().getName().equals(name))
-         {
-            ofType.add((ActionEntity)entity);
-         }
-      }
-
-      return nearestEntity(ofType, pos);
+      return point.getX() < 35 && point.getX() > 4
+              && point.getY() < 25 && point.getY() >= 5;
    }
 
    public boolean isOccupied(Point pos)
@@ -110,7 +107,7 @@ final class WorldModel
       }
    }
 
-   public void moveEntity(AnimatedEntity entity, Point pos)
+   public void moveEntity(Entity entity, Point pos)
    {
       Point oldPos = entity.getPosition();
       if (withinBounds(pos) && !pos.equals(oldPos))
@@ -120,24 +117,6 @@ final class WorldModel
          setOccupancyCell(pos, entity);
          entity.setPosition(pos);
       }
-   }
-
-   public Optional<Point> findOpenAround(Point pos)
-   {
-      for (int dy = -Fish.FISH_REACH; dy <= Fish.FISH_REACH; dy++)
-      {
-         for (int dx = -Fish.FISH_REACH; dx <= Fish.FISH_REACH; dx++)
-         {
-            Point newPt = new Point(pos.getX() + dx, pos.getY() + dy);
-            if (withinBounds(newPt) &&
-                    !isOccupied(newPt))
-            {
-               return Optional.of(newPt);
-            }
-         }
-      }
-
-      return Optional.empty();
    }
 
    public void load(Scanner in, ImageStore imageStore)
@@ -244,16 +223,16 @@ final class WorldModel
       }
    }
 
-   private void tryAddEntity(Entity entity)
+   public void tryAddEntity(Entity character)
    {
-      if (isOccupied(entity.getPosition()))
+      if (isOccupied(character.getPosition()))
       {
          // arguably the wrong type of exception, but we are not
          // defining our own exceptions yet
          throw new IllegalArgumentException("position occupied");
       }
 
-      addEntity(entity);
+      addEntity(character);
    }
 
    private boolean processLine(String line, ImageStore imageStore)
@@ -265,16 +244,6 @@ final class WorldModel
          {
             case Background.BGND_KEY:
                return parseBackground(properties, imageStore);
-            case Octo.OCTO_KEY:
-               return parseOcto(properties, imageStore);
-            case Obstacle.OBSTACLE_KEY:
-               return parseObstacle(properties, imageStore);
-            case Fish.FISH_KEY:
-               return parseFish(properties, imageStore);
-            case Atlantis.ATLANTIS_KEY:
-               return parseAtlantis(properties, imageStore);
-            case Sgrass.SGRASS_KEY:
-               return parseSgrass(properties, imageStore);
          }
       }
 
@@ -295,82 +264,23 @@ final class WorldModel
       return properties.length == Background.BGND_NUM_PROPERTIES;
    }
 
-   private boolean parseOcto(String [] properties, ImageStore imageStore)
+   public boolean parseMainChactacter(String [] properties, ImageStore imageStore)
    {
       if (properties.length == Octo.OCTO_NUM_PROPERTIES)
       {
          Point pt = new Point(Integer.parseInt(properties[Octo.OCTO_COL]),
                  Integer.parseInt(properties[Octo.OCTO_ROW]));
-         OctoNotFull entity = Creator.createOctoNotFull(properties[Octo.OCTO_ID],
-                 Integer.parseInt(properties[Octo.OCTO_LIMIT]),
-                 pt,
-                 Integer.parseInt(properties[Octo.OCTO_ACTION_PERIOD]),
-                 Integer.parseInt(properties[Octo.OCTO_ANIMATION_PERIOD]),
-                 imageStore.getImageList(Octo.OCTO_KEY));
-         tryAddEntity(entity);
+         Entity character = Creator.createMainCharacter(properties[Octo.OCTO_ID],
+                 pt, imageStore.getImageList(Octo.OCTO_KEY));
+         tryAddEntity(character);
       }
 
       return properties.length == Octo.OCTO_NUM_PROPERTIES;
    }
 
-   private boolean parseObstacle(String [] properties, ImageStore imageStore)
-   {
-      if (properties.length == Obstacle.OBSTACLE_NUM_PROPERTIES)
-      {
-         Point pt = new Point(
-                 Integer.parseInt(properties[Obstacle.OBSTACLE_COL]),
-                 Integer.parseInt(properties[Obstacle.OBSTACLE_ROW]));
-         Obstacle entity = Creator.createObstacle(properties[Obstacle.OBSTACLE_ID],
-                 pt, imageStore.getImageList(Obstacle.OBSTACLE_KEY));
-         tryAddEntity(entity);
-      }
 
-      return properties.length == Obstacle.OBSTACLE_NUM_PROPERTIES;
-   }
 
-   private boolean parseFish(String [] properties, ImageStore imageStore)
-   {
-      if (properties.length == Fish.FISH_NUM_PROPERTIES)
-      {
-         Point pt = new Point(Integer.parseInt(properties[Fish.FISH_COL]),
-                 Integer.parseInt(properties[Fish.FISH_ROW]));
-         Fish entity = Creator.createFish(properties[Fish.FISH_ID],
-                 pt, Integer.parseInt(properties[Fish.FISH_ACTION_PERIOD]),
-                 imageStore.getImageList(Fish.FISH_KEY));
-         tryAddEntity(entity);
-      }
 
-      return properties.length == Fish.FISH_NUM_PROPERTIES;
-   }
 
-   private boolean parseAtlantis(String [] properties, ImageStore imageStore)
-   {
-      if (properties.length == Atlantis.ATLANTIS_NUM_PROPERTIES)
-      {
-         Point pt = new Point(Integer.parseInt(properties[Atlantis.ATLANTIS_COL]),
-                 Integer.parseInt(properties[Atlantis.ATLANTIS_ROW]));
-         Atlantis entity = Creator.createAtlantis(properties[Atlantis.ATLANTIS_ID],
-                 pt, imageStore.getImageList(Atlantis.ATLANTIS_KEY));
-         tryAddEntity(entity);
-      }
-
-      return properties.length == Atlantis.ATLANTIS_NUM_PROPERTIES;
-   }
-
-   private boolean parseSgrass(String [] properties, ImageStore imageStore)
-   {
-      if (properties.length == Sgrass.SGRASS_NUM_PROPERTIES)
-      {
-         Point pt = new Point(Integer.parseInt(properties[Sgrass.SGRASS_COL]),
-                 Integer.parseInt(properties[Sgrass.SGRASS_ROW]));
-         Sgrass entity = Creator.createSgrass(properties[Sgrass.SGRASS_ID],
-                 pt,
-                 Integer.parseInt(properties[Sgrass.SGRASS_ACTION_PERIOD]),
-                 imageStore.getImageList(Sgrass.SGRASS_KEY));
-         tryAddEntity(entity);
-      }
-
-      return properties.length == Sgrass.SGRASS_NUM_PROPERTIES;
-   }
 
 }
