@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.List;
 
-public class Creator {
+public class EntityFactory {
 
     public static Atlantis createAtlantis(String id, Point position, List<PImage> images)
     {

@@ -4,6 +4,7 @@
  */
 
 import java.awt.font.ImageGraphicAttribute;
+import java.util.Optional;
 
 public class FieldManager {
     public static final int XOFFSET = 5; //Distance field starts from game border (X axis)
@@ -11,18 +12,25 @@ public class FieldManager {
     public String[][] mineField;
     private int flagCount;
 
-    private int placedFlagCount = 0;
-    private int grassCount = 0;
+    public int flaggedSpotsRemaining;
+    public int grassCount;
 
     public FieldManager(Background[][] background, int flagCount) {
         mineField = new String[background[0].length / 2][background.length / 2];
         this.flagCount = flagCount;
+        this.flaggedSpotsRemaining = flagCount;
+        this.grassCount = 600 - flagCount;
     }
 
     //Method to update
     public String[][] CreateField() {
-        for (int i = 0; i < flagCount; i++) {
-            mineField[(int) (Math.random() * 29 + 1) + XOFFSET][(int) (Math.random() * 20) + XOFFSET] = "Mine";
+        for (int i = 0; i < flagCount; i += 0) {
+            int randomX = (int) (Math.random() * 29 + 1) + XOFFSET;
+            int randomY = (int) (Math.random() * 20) + XOFFSET;
+            if (mineField[randomX][randomY] == null) {
+                mineField[randomX][randomY] = "Mine";
+                i++;
+            }
         }
         this.caluclateNeighborValues();
         return mineField;
@@ -68,9 +76,12 @@ public class FieldManager {
         if((col - FieldManager.XOFFSET + 1 > 0 && col - FieldManager.XOFFSET < 20) &&
                 ((row - FieldManager.YOFFSET + 1 > 0 && row - FieldManager.YOFFSET < 30)))
         {
-            if (world.backgroundType[row][col] != null && !world.backgroundType[row][col].equals("Mine")) {
+            if (world.backgroundType[row][col] != null && !world.backgroundType[row][col].equals("Mine") &&
+                    Optional.of(world.background[col][row].getCurrentImage())
+                            .equals(Optional.of(imageStore.getImageList("grass").get(0)))) {
                 changeTileBackground(row, col, imageStore, world);
                 mineField[row][col] = "searched";
+                this.grassCount -= 1;
             }
 
             if (cameFromZero) {
@@ -81,14 +92,18 @@ public class FieldManager {
 
                 for (int curRow = rowStart; curRow <= rowFinish; curRow += 1) {
                     for (int curCol = colStart; curCol <= colFinish; curCol += 1) {
-                        if (mineField[curRow][curCol] != null && !mineField[curRow][curCol].equals("searched") && !mineField[curRow][curCol].equals("Mine")
-                                && !mineField[curRow][curCol].equals("flag")) {
+                        if (Optional.of(world.background[curCol][curRow].getCurrentImage())
+                                .equals(Optional.of(imageStore.getImageList("grass").get(0))) && mineField[curRow][curCol] != null && !mineField[curRow][curCol].equals("searched") && !mineField[curRow][curCol].equals("Mine")
+                                && !mineField[curRow][curCol].equals("flag") && !(curRow == row && curCol == col)) {
                             int tileValue = Integer.parseInt(mineField[curRow][curCol]);
-                            if (tileValue == 0)
+                            if (tileValue == 0) {
                                 reveal(curRow, curCol, imageStore, world, true);
+
+                            }
                             else {
-                                if (cameFromZero)
+                                if (cameFromZero) {
                                     reveal(curRow, curCol, imageStore, world, false);
+                                }
                             }
 
                         }

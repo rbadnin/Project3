@@ -18,7 +18,7 @@ public abstract class ActionEntity extends Entity{
     // abstract methods
     public abstract void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore);
 
-    public abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) throws InterruptedException;
+    public abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
 
 
     // methods

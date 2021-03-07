@@ -33,7 +33,6 @@ final class WorldModel
       this.numRows = numRows - 30;
       this.numCols = numCols-40;
       this.background = new Background[numRows][numCols];
-//      this.backgroundType = new String[0][0];
       this.occupancy = new Entity[numRows][numCols];
       this.entities = new HashSet<>();
 
@@ -42,8 +41,10 @@ final class WorldModel
          Arrays.fill(this.background[row], defaultBackground);
       }
 
-      manager = new FieldManager(this.background, 100);
+
+      manager = new FieldManager(this.background, 20);
       this.backgroundType = manager.CreateField();
+
 
    }
 
@@ -152,36 +153,22 @@ final class WorldModel
 
 
    // private methods
-   public Point findNextDirt(Point start, ImageStore imageStore)
+   public Point findNextDirt(ImageStore imageStore)
    {
       Point nearest= new Point(0, 0);
-      Point nextGrass = new Point(0,0);
-
-      int rowStart  = Math.max( start.getX() - 1, 0 + FieldManager.YOFFSET);
-      int rowFinish = Math.min( start.getX() + 1, background.length - 1 );
-      int colStart  = Math.max( start.getY() - 1, 0 + FieldManager.XOFFSET);
-      int colFinish = Math.min( start.getY() + 1, background[0].length - 1 );
-
-
       boolean foundDirt = false;
-      for ( int curRow = rowStart; curRow <= rowFinish; curRow++ ) {
-         for ( int curCol = colStart; curCol <= colFinish; curCol++ ) {
-            if (Optional.of(this.background[start.getY()][start.getX()].getCurrentImage())
-                    .equals(Optional.of(imageStore.getImageList("grass").get(0))) )
-                  nextGrass = nearest = new Point(curRow, curCol);
-            else if ((curRow != start.getX() && curCol != start.getY()) &&
-                    !Optional.of(this.background[start.getY()][start.getX()].getCurrentImage())
-                            .equals(Optional.of(imageStore.getImageList("flag").get(0))))
-            {
-                  foundDirt = true;
-                  nearest = new Point(curRow, curCol);
-            }
+      while (!foundDirt)
+      {
+         nearest = new Point((int) (Math.random() * 29 + 1) + FieldManager.XOFFSET, (int) (Math.random() * 20) + FieldManager.XOFFSET);
+         if (!Optional.of(this.background[nearest.getY()][nearest.getX()].getCurrentImage())
+                 .equals(Optional.of(imageStore.getImageList("grass").get(0))) &&
+                 !Optional.of(this.background[nearest.getY()][nearest.getX()].getCurrentImage())
+                         .equals(Optional.of(imageStore.getImageList("flag").get(0))))
+         {
+            foundDirt = true;
          }
       }
-      if (foundDirt)
-         return nearest;
-      else
-         return nextGrass;
+      return nearest;
    }
 
    private boolean withinBounds(Point pos)

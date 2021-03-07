@@ -34,4 +34,8 @@ public class Atlantis extends AnimatedEntity{
     }
 
 
+    @Override
+    void nextImage(String d) {
+
+    }
 }

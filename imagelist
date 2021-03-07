@@ -14,8 +14,16 @@ number5 images/Number5.bmp
 number6 images/Number6.bmp
 number7 images/Number7.bmp
 number8 images/Number8.bmp
+mainCharacter images/WalkRightClosed.bmp
+mainCharacter images/WalkRightOpen.bmp
+mainCharacter images/WalkDownClosed.bmp
+mainCharacter images/WalkDownOpen.bmp
+mainCharacter images/WalkLeftClosed.bmp
+mainCharacter images/WalkLeftOpen.bmp
+mainCharacter images/WalkUpClosed.bmp
+mainCharacter images/WalkUpOpen.bmp
+mainCharacter images/WalkCrouch.bmp
 flag images/Flag.bmp
-walkRight images/WalkingRight.bmp
 octo images/s1.bmp 255 255 255 0
 octo images/s2.bmp 255 255 255 0
 octo images/s3.bmp 255 255 255 0

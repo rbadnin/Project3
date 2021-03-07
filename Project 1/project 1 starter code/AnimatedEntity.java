@@ -23,10 +23,7 @@ public abstract class AnimatedEntity extends ActionEntity{
 
 
     // methods
-    public void nextImage()
-    {
-        this.setImageIndex((this.getImageIndex() + 1) % this.getImages().size());
-    }
+    abstract void nextImage(String a);
 
     public Animation createAnimationAction(int repeatCount){ return new Animation(this, repeatCount);}
 
