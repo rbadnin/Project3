@@ -1,43 +1,58 @@
 import processing.core.PImage;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-public class Bird extends AnimatedEntity
-{
-    private DFSPathingStrategy strategy = new DFSPathingStrategy();
+public class Scorpion extends AnimatedEntity{
+    private AStarPathingStrategy strategy = new AStarPathingStrategy();
     private EventScheduler scheduler;
-    private Point nextPosition = new Point(0,0);
-    private String directionOfTravel = "right";
+    public Point nextPosition;
     private List<Point> path = null;
+    private String directionOfTravel = "up";
+    public Point startingPos = new Point(0,0);
+    public int scorpionRandomCount = 0;
 
-    public Bird(String id, Point position, List<PImage> images)
+    public Scorpion(String id, Point position, List<PImage> images)
     {
         super(id, position, images, 2, 2);
     }
 
     @Override
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore) {
-        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), 120);
+        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), 50);
         scheduler.scheduleEvent(this, this.createAnimationAction(0), this.getAnimationPeriod());
         this.scheduler = scheduler;
     }
 
+    @Override
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        if (path == null || getPosition().equals(nextPosition) || path.size() == 0) {
-            nextPosition =  new Point((int) (Math.random() * 29), (int) (Math.random() * 39));
+        if (this.getPosition().equals(startingPos)){
+            this.setPosition(new Point(this.getPosition().getX() + 1, this.getPosition().getY()));
+            world.tryAddEntity(this);
+            startingPos = new Point(0,0);
+            int randomX = (int) (Math.random() * 29 + 1) + world.manager.XOFFSET;
+            int randomY = (int) (Math.random() * 20) + world.manager.XOFFSET;
+            nextPosition =  new Point(randomY, randomX);
             path = strategy.computePath(getPosition(), nextPosition,
-                    p -> (world.backgroundType[p.getX()][p.getY()] == null || !world.backgroundType[p.getX()][p.getY()].equals("Mine")),
+                    p -> (world.canMove(p) && (world.backgroundType[p.getX()][p.getY()] == null || !world.backgroundType[p.getX()][p.getY()].equals("Mine"))),
                     (p1, p2) -> neighbors(p1, p2),
                     PathingStrategy.CARDINAL_NEIGHBORS);
         }
-        if (path.size() > 0) {
+
+        else if (getPosition().equals(nextPosition) || path.size() == 0) {
+            if (scorpionRandomCount < 10)
+                nextPosition =  new Point((int) (Math.random() * 29), (int) (Math.random() * 39));
+            scorpionRandomCount++;
+            path = strategy.computePath(getPosition(), nextPosition,
+                    p -> (world.canMove(p) && (world.backgroundType[p.getX()][p.getY()] == null || !world.backgroundType[p.getX()][p.getY()].equals("Mine"))),
+                    (p1, p2) -> neighbors(p1, p2),
+                    PathingStrategy.CARDINAL_NEIGHBORS);
+        }
+        else if (path.size() > 0){
             directionOfTravel = getDirectionOfTravel(path.get(0));
-            if (!world.isOccupied(path.get(0))) {
-                world.moveEntity(this, path.get(0));
-                path.remove(path.get(0));
-            }
+            world.moveEntity(this, path.get(0));
+            path.remove(path.get(0));
+
+
         }
         scheduleActions(scheduler, world, imageStore);
     }
@@ -65,28 +80,27 @@ public class Bird extends AnimatedEntity
     public void nextImage(String directionOfTravel)
     {
         int newImageIndex = 0;
-        boolean wingsUp = (this.getImageIndex() % 2) == 0;
+        boolean tailLeft = (getImageIndex() % 2) == 0;
         switch(this.directionOfTravel){
             case "right":
-                if (wingsUp) newImageIndex = 1;
+                if (tailLeft) newImageIndex = 1;
                 else newImageIndex = 0;
                 break;
             case "down":
-                if (wingsUp) newImageIndex = 3;
+                if (tailLeft) newImageIndex = 3;
                 else newImageIndex = 2;
                 break;
             case "left":
-                if (wingsUp) newImageIndex = 5;
+                if (tailLeft) newImageIndex = 5;
                 else newImageIndex = 4;
                 break;
             case "up":
-                if (wingsUp) newImageIndex = 7;
+                if (tailLeft) newImageIndex = 7;
                 else newImageIndex = 6;
                 break;
         }
         this.setImageIndex(newImageIndex);
-        scheduler.scheduleEvent(this,
-                this.createAnimationAction(1),
+        scheduler.scheduleEvent(this, this.createAnimationAction(1),
                 this.getAnimationPeriod());
     }
 }

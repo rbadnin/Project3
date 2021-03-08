@@ -25,6 +25,16 @@ public class EntityFactory {
         return new DirtFiller(id, position, images);
     }
 
+    public static Bird createBird(String id, Point position, List<PImage> images)
+    {
+        return new Bird(id, position, images);
+    }
+
+    public static Scorpion createScorpion(String id, Point position, List<PImage> images)
+    {
+        return new Scorpion(id, position, images);
+    }
+
 
 
 

@@ -42,7 +42,7 @@ final class WorldModel
       }
 
 
-      manager = new FieldManager(this.background, 20);
+      manager = new FieldManager(this.background, 55);
       this.backgroundType = manager.CreateField();
 
 
@@ -171,10 +171,10 @@ final class WorldModel
       return nearest;
    }
 
-   private boolean withinBounds(Point pos)
+   public boolean withinBounds(Point pos)
    {
-      return pos.getY() >= 0 && pos.getY() < numRows &&
-              pos.getX() >= 0 && pos.getX() < numCols;
+      return pos.getY() >= 0 && pos.getY() < 30 &&
+              pos.getX() >= 0 && pos.getX() < 40;
    }
 
    private Entity getOccupancyCell(Point pos)

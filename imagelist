@@ -1,4 +1,12 @@
+flag images/Flag.bmp
 grass images/Grass.bmp
+bush images/Bush.bmp
+treeTrunk images/TreeTrunk.bmp
+treeTop images/TreeTop.bmp
+pondTopRight images/PondTopRight.bmp
+pondBottomRight images/PondBottomRight.bmp
+pondBottomLeft images/PondBottomLeft.bmp
+pondTopLeft images/PondTopLeft.bmp
 fenceFront images/FenceFront.bmp
 fenceTopRight images/FenceTopRight.bmp
 fenceRight images/FenceRight.bmp
@@ -23,10 +31,28 @@ mainCharacter images/WalkLeftOpen.bmp
 mainCharacter images/WalkUpClosed.bmp
 mainCharacter images/WalkUpOpen.bmp
 mainCharacter images/WalkCrouch.bmp
-flag images/Flag.bmp
-octo images/s1.bmp 255 255 255 0
-octo images/s2.bmp 255 255 255 0
-octo images/s3.bmp 255 255 255 0
-octo images/s4.bmp 255 255 255 0
-octo images/s5.bmp 255 255 255 0
-
+dirtFiller images/DirtWalkRightClosed.bmp
+dirtFiller images/DirtWalkRightOpen.bmp
+dirtFiller images/DirtWalkDownClosed.bmp
+dirtFiller images/DirtWalkDownOpen.bmp
+dirtFiller images/DirtWalkLeftClosed.bmp
+dirtFiller images/DirtWalkLeftOpen.bmp
+dirtFiller images/DirtWalkUpClosed.bmp
+dirtFiller images/DirtWalkUpOpen.bmp
+dirtFiller images/DirtCrouch.bmp
+bird images/BirdRightOpen.bmp
+bird images/BirdRightClosed.bmp
+bird images/BirdDownOpen.bmp
+bird images/BirdDownClosed.bmp
+bird images/BirdLeftOpen.bmp
+bird images/BirdLeftClosed.bmp
+bird images/BirdUpOpen.bmp
+bird images/BirdUpClosed.bmp
+scorpion images/scorpionRightOpen.bmp
+scorpion images/scorpionRightClosed.bmp
+scorpion images/scorpionDownOpen.bmp
+scorpion images/scorpionDownClosed.bmp
+scorpion images/scorpionLeftOpen.bmp
+scorpion images/scorpionLeftClosed.bmp
+scorpion images/scorpionUpOpen.bmp
+scorpion images/scorpionUpClosed.bmp

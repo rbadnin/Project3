@@ -10,7 +10,7 @@ public class FieldManager {
     public static final int XOFFSET = 5; //Distance field starts from game border (X axis)
     public static final int YOFFSET = 5; //Distance field starts from game border (Y axis)
     public String[][] mineField;
-    private int flagCount;
+    public int flagCount;
 
     public int flaggedSpotsRemaining;
     public int grassCount;
@@ -120,7 +120,6 @@ public class FieldManager {
         if (world.backgroundType[row][col] != null && !world.backgroundType[row][col].equals("Mine"))
         {
             int number = Integer.parseInt(world.backgroundType[row][col]);
-            System.out.println(number);
             if(number == 0)
                world.background[col][row] = new Background("dirt", imageStore.getImageList("dirt"));
             else if (number == 1)

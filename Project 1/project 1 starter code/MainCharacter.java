@@ -24,7 +24,12 @@ public class MainCharacter extends AnimatedEntity
 
     @Override
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-
+        world.moveEntity(this, new Point(this.getPosition().getX() - 1, this.getPosition().getY()));
+        if (this.getPosition().getX() == 0) {
+            world.removeEntity(this);
+            directionOfTravel = "left";
+        }
+        scheduler.scheduleEvent(this, new Activity(this, world, imageStore), 100);
     }
 
     public void nextImage(String directionOfTravel) {

@@ -125,9 +125,6 @@ class AStarPathingStrategy implements PathingStrategy
 
 
         Collections.reverse(path);
-        Point nextMove = path.get(0);
-        path.clear();
-        path.add(nextMove);
         return path;
     }
 
